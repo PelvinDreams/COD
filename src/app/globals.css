@@ -2,74 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
-/* Root Variables */
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 220 13% 13%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 13% 13%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 13%;
-    --primary: 220 98% 61%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 13% 13%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 220 8% 90%;
-    --muted-foreground: 220 13% 13%;
-    --accent: 200 83% 55%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 75% 63%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 13% 13%;
-    --input: 220 13% 13%;
-    --ring: 220 98% 61%;
-    --chart-1: 345 76% 54%;
-    --chart-2: 34 89% 50%;
-    --chart-3: 48 89% 55%;
-    --chart-4: 198 78% 60%;
-    --chart-5: 285 65% 68%;
-    --radius: 0.5rem;
-  }
+section {
+  @apply py-20 bg-bodyBg;
+}
 
-  /* Dark Mode Variables */
-  body.dark {
-    --background: 220 13% 13%;
-    --foreground: 0 0% 100%;
-    --card: 220 10% 20%;
-    --card-foreground: 0 0% 100%;
-    --popover: 220 10% 20%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 220 50% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 25% 25%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 220 15% 20%;
-    --muted-foreground: 0 0% 100%;
-    --accent: 200 60% 55%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 60% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 25% 25%;
-    --input: 220 25% 25%;
-    --ring: 220 80% 40%;
-    --chart-1: 345 60% 45%;
-    --chart-2: 34 70% 40%;
-    --chart-3: 48 70% 50%;
-    --chart-4: 198 60% 50%;
-    --chart-5: 285 50% 55%;
-  }
-
-  /* Base Styles */
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
+nav {
+  display: block !important;
 }
