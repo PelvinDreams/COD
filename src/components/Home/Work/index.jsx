@@ -9,7 +9,7 @@ const Work = () => {
                 <div className="bg-banner-image hidden lg:block absolute w-full h-full top-1/2 -right-1/4 blur-390"></div>
                 <div className='text-center mb-14'>
                     <h3 className='text-white/80 text-3xl md:text-5xl font-bold mb-3'>How it work</h3>
-                    <p className='text-white/60 md:text-lg font-normal leading-8'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. <br /> Lorem Ipsum has been the industry standard dummy text ever.</p>
+                    <p className='text-white/60 md:text-lg font-normal leading-8'>We guarantee advanced transaction protection and <br /> safeguard user information against phishing attempts. </p>
                 </div>
                 <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-y-20 gap-x-5 mt-32'>
                     {workData.map((items, i) => (

@@ -18,17 +18,17 @@ export const workData = [
     {
         imgSrc: "/images/work/icon-one.svg",
         heading: "Create Account",
-        subheading: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s...",
+        subheading: "Start by signing up on the platform. Simply provide your  basic information, verify your account, and get ready to explore a variety of trading options...",
     },
     {
         imgSrc: "/images/work/icon-two.svg",
         heading: "Find your Credit",
-        subheading: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s...",
+        subheading: "Browse through the platform to find Netflix accounts, VPNs, games, social media accounts, and more. Use filters to narrow down your search and find the best deals...",
     },
     {
         imgSrc: "/images/work/icon-three.svg",
         heading: "Exchange Currency",
-        subheading: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s...",
+        subheading: "Make your purchase through our secure system. Sellers deliver the product, and once you confirm receipt, payments are released, ensuring trust and transparency...",
     },
 ];
 

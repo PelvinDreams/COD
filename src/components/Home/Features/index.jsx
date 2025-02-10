@@ -11,7 +11,7 @@ const Features = () => {
                     <div>
                         <h3 className="text-primary text-lg font-semibold mb-4 text-center md:text-start">FEATURES</h3>
                         <h2 className="text-white text-3xl lg:text-5xl font-semibold leading-snug mb-6 text-center md:text-start">The most trusted premium account platform</h2>
-                        <p className="lg:text-lg font-normal text-white/60 text-center md:text-start">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s.</p>
+                        <p className="lg:text-lg font-normal text-white/60 text-center md:text-start">We have everything you’re searching for! From OG skins in games like Fortnite, Call of Duty, GTA, and Valorant to powerful characters in accounts from Genshin Impact, Pokémon GO, and Clash of Clans—COD is your ultimate one-stop shop for all this and more.</p>
                     </div>
                     {/* Column-2 */}
                     <div>
