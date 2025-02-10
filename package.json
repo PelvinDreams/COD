@@ -24,6 +24,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.1",
+    "react-router-dom": "^7.1.5",
     "react-slick": "^0.30.3",
     "shadcn-ui": "^0.9.4",
     "slick-carousel": "^1.8.1",
