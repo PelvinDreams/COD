@@ -35,7 +35,10 @@ const Banner = () => {
                 we've got you covered.
               </p>
               <div className="flex align-middle justify-center md:justify-start">
-                <button className="text-xl font-semibold text-white py-4 px-6 lg:px-12 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-xl mr-6">
+                <button
+                  className="text-xl font-semibold text-white py-4 px-6 lg:px-12 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary rounded-xl mr-6"
+                  onClick={() => (window.location.href = "/sign-up")}
+                >
                   Get Started
                 </button>
                 <button

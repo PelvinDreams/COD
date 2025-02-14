@@ -122,7 +122,7 @@ const SignUp = () => {
               }
               required
             />
-            <Button className="w-full border-none"  size="lg" disabled={pending}>
+            <Button className="w-full border-none" size="lg" disabled={pending}>
               continue
             </Button>
           </form>
@@ -154,7 +154,7 @@ const SignUp = () => {
               className="text-sky-700 ml-4 hover:underline cursor-pointer"
               href="sign-in"
             >
-              Sing in{" "}
+              Sign in {/* Fixed typo from "Sing in" to "Sign in" */}
             </Link>
           </p>
         </CardContent>
