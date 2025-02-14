@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import type { AppProps } from "next/app";
 import PageLoader from "@/components/Common/PageLoader"; // Ensure correct import path
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
+  // Add AppProps type
   const [loading, setLoading] = useState(true); // Set initial state to true
   const router = useRouter();
 
