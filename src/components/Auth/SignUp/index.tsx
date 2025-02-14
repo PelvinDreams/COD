@@ -6,107 +6,160 @@ import SocialSignUp from "../SocialSignUp";
 import Logo from "@/components/Layout/Header/Logo";
 import { useState } from "react";
 import Loader from "@/components/Common/Loader";
+
+// import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardDescription,
+  CardContent,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator"; // Corrected import
+// import Link from "next/link";
+import { signIn } from "next-auth/react"; // Fixed casing
+// import { useRouter } from "next/navigation";
+// import { toast } from "sonner";
+import { TriangleAlert } from "lucide-react";
+
+// Icons
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+
 const SignUp = () => {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState(null);
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPending(true);
 
-    setLoading(true);
-    const data = new FormData(e.currentTarget);
-    const value = Object.fromEntries(data.entries());
-    const finalData = { ...value };
-
-    fetch("/api/register", {
+    const res = await fetch("/api/auth/signup", {
+      // Added fetch call
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(finalData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        toast.success("Successfully registered");
-        setLoading(false);
-        router.push("/signin");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-        setLoading(false);
-      });
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      setPending(false);
+      toast.success(data.message);
+      router.push("/sign-in");
+    } else if (res.status === 400) {
+      setError(data.message);
+      setPending(false);
+    } else if (res.status === 500) {
+      setError(data.message);
+      setPending(false);
+    }
   };
 
+  const handleProvider = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    value: "github" | "google"
+  ) => {
+    event.preventDefault();
+    signIn(value, { callbackUrl: "/" });
+  };
   return (
-    <>
-      <div className="mb-10 text-center mx-auto inline-block max-w-[160px]">
-        <Logo />
-      </div>
+    <div className="h-full flex items-center justify-center bg-[#1b0918]">
+      <Card className="md:h-auto w-[80%] sm:w-[420px] p-4 sm:p-8">
+        <CardHeader>
+          <CardTitle className="text-center">Sign up</CardTitle>
+          <CardDescription className="text-sm text-center text-accent-foreground">
+            Use email or service, to create account
+          </CardDescription>
+        </CardHeader>
+        {!!error && (
+          <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+            <TriangleAlert />
+            <p>{error}</p>
+          </div>
+        )}
+        <CardContent className="px-2 sm:px-6">
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <Input
+              type="text"
+              disabled={pending}
+              placeholder="Full name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+            <Input
+              type="email"
+              disabled={pending}
+              placeholder="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
+            <Input
+              type="password"
+              disabled={pending}
+              placeholder="password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+            />
+            <Input
+              type="password"
+              disabled={pending}
+              placeholder="confirm password"
+              value={form.confirmPassword}
+              onChange={(e) =>
+                setForm({ ...form, confirmPassword: e.target.value })
+              }
+              required
+            />
+            <Button className="w-full border-none"  size="lg" disabled={pending}>
+              continue
+            </Button>
+          </form>
 
-      <SocialSignUp />
-
-      <span className="z-1 relative my-8 block text-center">
-        <span className="text-body-secondary relative z-10 inline-block px-3 text-base text-white">
-          OR
-        </span>
-      </span>
-
-      <form onSubmit={handleSubmit}>
-        <div className="mb-[22px]">
-          <input
-            type="text"
-            placeholder="Name"
-            name="name"
-            required
-            className="w-full rounded-md border border-white border-solid bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none text-white dark:focus:border-primary"
-          />
-        </div>
-        <div className="mb-[22px]">
-          <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            required
-            className="w-full rounded-md border border-white border-solid bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none text-white dark:focus:border-primary"
-          />
-        </div>
-        <div className="mb-[22px]">
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            required
-            className="w-full rounded-md border border-white border-solid bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none text-white dark:focus:border-primary"
-          />
-        </div>
-        <div className="mb-9">
-          <button
-            type="submit"
-            className="flex w-full items-center text-lg text-white font-medium justify-center rounded-md bg-primary px-5 py-3 transition duration-300 ease-in-out hover:bg-transparent hover:text-primary border-primary border "
-          >
-            Sign Up {loading && <Loader />}
-          </button>
-        </div>
-      </form>
-
-      <p className="text-body-secondary mb-4 text-white text-base">
-        By creating an account you are agree with our{" "}
-        <a href="/#" className="text-primary hover:underline">
-          Privacy
-        </a>{" "}
-        and{" "}
-        <a href="/#" className="text-primary hover:underline">
-          Policy
-        </a>
-      </p>
-
-      <p className="text-body-secondary text-white text-base">
-        Already have an account?
-        <Link href="/" className="pl-2 text-primary hover:underline">
-          Sign In
-        </Link>
-      </p>
-    </>
+          <Separator />
+          <div className="flex my-2 justify-evenly mx-auto items-center">
+            <Button
+              disabled={false}
+              onClick={() => {}}
+              variant="outline"
+              size="lg"
+              className="bg-slate-300 hover:bg-slate-400 hover:scale-110"
+            >
+              <FcGoogle className="size-8 left-2.5 top-2.5" />
+            </Button>
+            <Button
+              disabled={false}
+              onClick={(e) => handleProvider(e, "github")}
+              variant="outline"
+              size="lg"
+              className="bg-slate-300 hover:bg-slate-400 hover:scale-110"
+            >
+              <FaGithub className="size-8 left-2.5 top-2.5" />
+            </Button>
+          </div>
+          <p className="text-center text-sm mt-2 text-muted-foreground">
+            Already have an account?
+            <Link
+              className="text-sky-700 ml-4 hover:underline cursor-pointer"
+              href="sign-in"
+            >
+              Sing in{" "}
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

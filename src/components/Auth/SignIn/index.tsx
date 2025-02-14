@@ -1,109 +1,139 @@
 "use client";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import toast from "react-hot-toast";
-import SocialSignIn from "../SocialSignIn";
-import Logo from "@/components/Layout/Header/Logo"
+import SocialSignUp from "../SocialSignUp";
+import Logo from "@/components/Layout/Header/Logo";
+import { useState } from "react";
 import Loader from "@/components/Common/Loader";
 
-const Signin = () => {
+// import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardDescription,
+  CardContent,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator"; // Corrected import
+// import Link from "next/link";
+import { signIn } from "next-auth/react"; // Fixed casing
+// import { useRouter } from "next/navigation";
+// import { toast } from "sonner";
+import { TriangleAlert } from "lucide-react";
+
+// Icons
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+
+const SignIn = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [pending, setPending] = useState(false);
   const router = useRouter();
+  const [error, setError] = useState("");
 
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-    checkboxToggle: false,
-  });
-  const [loading, setLoading] = useState(false);
-
-  const loginUser = (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    setLoading(true);
-    signIn("credentials", { ...loginData, redirect: false })
-      .then((callback) => {
-        if (callback?.error) {
-          toast.error(callback?.error);
-          console.log(callback?.error);
-          setLoading(false);
-          return;
-        }
-
-        if (callback?.ok && !callback?.error) {
-          toast.success("Login successful");
-          setLoading(false);
-          router.push("/");
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err.message);
-        toast.error(err.message);
-      });
+    setPending(true);
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+    if (res?.ok) {
+      router.push("/");
+      toast.success("login successful");
+    } else if (res?.status === 401) {
+      setError("Invalid Credentials");
+      setPending(false);
+    } else {
+      setError("Something went wrong");
+    }
   };
 
+  const handleProvider = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    value: "github" | "google"
+  ) => {
+    event.preventDefault();
+    signIn(value, { callbackUrl: "/" });
+  };
   return (
-    <>
-      <div className="mb-10 text-center mx-auto inline-block max-w-[160px]">
-        <Logo />
-      </div>
+    <div className="h-full flex items-center justify-center bg-[#1b0918]">
+      <Card className="md:h-auto w-[80%] sm:w-[420px] p-4 sm:p-8">
+        <CardHeader>
+          <CardTitle className="text-center">Sign in</CardTitle>
+          <CardDescription className="text-sm text-center text-accent-foreground">
+            Use email or service, to sign in
+          </CardDescription>
+        </CardHeader>
+        {!!error && (
+          <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+            <TriangleAlert />
+            <p>{error}</p>
+          </div>
+        )}
+        <CardContent className="px-2 sm:px-6">
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <Input
+              type="email"
+              disabled={pending}
+              placeholder="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Input
+              type="password"
+              disabled={pending}
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
 
-      <SocialSignIn />
+            <Button className="w-full" size="lg" disabled={pending}>
+              continue
+            </Button>
+          </form>
 
-      <span className="z-1 relative my-8 block text-center">
-        <span className="text-body-secondary relative z-10 inline-block px-3 text-base text-white">
-          OR
-        </span>
-      </span>
-
-      <form onSubmit={(e) => e.preventDefault()}>
-        <div className="mb-[22px]">
-          <input
-            type="email"
-            placeholder="Email"
-            onChange={(e) =>
-              setLoginData({ ...loginData, email: e.target.value })
-            }
-            className="w-full rounded-md border border-white border-solid bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none text-white dark:focus:border-primary"
-          />
-        </div>
-        <div className="mb-[22px]">
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) =>
-              setLoginData({ ...loginData, password: e.target.value })
-            }
-            className="w-full rounded-md border border-white border-solid bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none text-white dark:focus:border-primary"
-          />
-        </div>
-        <div className="mb-9">
-          <button
-            onClick={loginUser}
-            type="submit"
-            className="bg-primary w-full py-3 rounded-lg text-lg text-white font-medium border border-primary hover:text-primary hover:bg-transparent"
-          >
-            Sign In {loading && <Loader />}
-          </button>
-        </div>
-      </form>
-
-      <Link
-        href="/forgot-password"
-        className="mb-2 inline-block text-base text-dark hover:text-primary text-white dark:hover:text-primary"
-      >
-        Forgot Password?
-      </Link>
-      <p className="text-body-secondary text-white text-base">
-        Not a member yet?{" "}
-        <Link href="/" className="text-primary hover:underline">
-          Sign Up
-        </Link>
-      </p>
-    </>
+          <Separator />
+          <div className="flex my-2 justify-evenly mx-auto items-center">
+            <Button
+              disabled={false}
+              onClick={() => {}}
+              variant="outline"
+              size="lg"
+              className="bg-slate-300 hover:bg-slate-400 hover:scale-110"
+            >
+              <FcGoogle className="size-8 left-2.5 top-2.5" />
+            </Button>
+            <Button
+              disabled={false}
+              onClick={(e) => handleProvider(e, "github")}
+              variant="outline"
+              size="lg"
+              className="bg-slate-300 hover:bg-slate-400 hover:scale-110"
+            >
+              <FaGithub className="size-8 left-2.5 top-2.5" />
+            </Button>
+          </div>
+          <p className="text-center text-sm mt-2 text-muted-foreground">
+            Create new account
+            <Link
+              className="text-sky-700 ml-4 hover:underline cursor-pointer"
+              href="sign-up"
+            >
+              Sing up{" "}
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
-export default Signin;
+export default SignIn;
